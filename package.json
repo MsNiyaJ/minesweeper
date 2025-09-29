@@ -1,8 +1,12 @@
 {
   "name": "minesweeper",
+  "license": "UNLICENSED",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.19.0 || 22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",

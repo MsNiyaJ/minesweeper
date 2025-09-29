@@ -1,15 +1,20 @@
 <template>
   <div id="board-container">
-    <button id="flag-btn" :class="flagClass" @click="toggleFlag">
+    <button
+      id="flag-btn"
+      :class="{ enabled: onFlagMode }"
+      @click="toggleFlagMode"
+    >
       <img src="../assets/red-flag.png" />
     </button>
     <div id="board">
-      <div id="board-row" v-for="row in board.boardCells">
+      <div class="board-row" v-for="(row, rowIndex) in cells">
         <Cell
-          v-for="value in row"
-          :value="value"
-          :onFlagMode="flagMode"
-          @emptyCellClicked="board.revealEmptyCells()"
+          v-for="(cellData, colIndex) in row"
+          :cellData="cellData"
+          :onFlagMode="onFlagMode"
+          @revealCells="board.revealCells(rowIndex, colIndex)"
+          @gameOver="endGame"
         />
       </div>
     </div>
@@ -17,17 +22,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { Board } from '../board';
 import Cell from './Cell.vue';
 
-const board = ref(new Board());
-const flagClass = ref('flag-off');
-const flagMode = ref(false);
+const board = reactive(new Board());
+const cells = reactive(board.boardCells);
+const onFlagMode = ref(false);
 
-function toggleFlag() {
-  flagMode.value = !flagMode.value;
-  flagClass.value = flagMode.value ? 'flag-on' : 'flag-off';
+function toggleFlagMode() {
+  onFlagMode.value = !onFlagMode.value;
+}
+
+function endGame() {
+  alert('Game Over!');
 }
 </script>
 
@@ -39,13 +47,14 @@ function toggleFlag() {
   justify-content: center;
 }
 
-#board-row {
+.board-row {
   display: flex;
 }
 
 #flag-btn {
   cursor: pointer;
   margin-bottom: 10px;
+  background-color: #dfdfdf;
 }
 
 #flag-btn img {
@@ -53,11 +62,7 @@ function toggleFlag() {
   height: 20px;
 }
 
-#flag-btn.flag-on {
+#flag-btn.enabled {
   background-color: #8b8b8b;
-}
-
-#flag-btn.flag-off {
-  background-color: #dfdfdf;
 }
 </style>

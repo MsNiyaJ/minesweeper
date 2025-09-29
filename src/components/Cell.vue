@@ -1,34 +1,37 @@
 <template>
-  <div class="cell" @click="handleClick">
-    <img v-show="flagShown" class="red-flag" src="../assets/red-flag.png" />
-    <span v-show="valueShown">{{ value }}</span>
+  <div
+    :class="{ cell: true, revealed: cellData.revealed }"
+    @click="handleClick"
+  >
+    <img
+      v-show="cellData.hasFlag"
+      class="red-flag"
+      src="../assets/red-flag.png"
+    />
+    <span v-show="cellData.revealed">{{ cellData.value }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import type { ICellData } from '../board';
 
-const props = defineProps<{ value: string; onFlagMode: boolean }>();
-const emit = defineEmits(['emptyCellClicked']);
-
-const valueShown = ref(false);
-const flagShown = ref(false);
+const props = defineProps<{ cellData: ICellData; onFlagMode: boolean }>();
+const emit = defineEmits(['gameOver', 'revealCells']);
 
 function handleClick() {
-  const { value, onFlagMode } = props;
-  const bombClicked = value === 'B';
-  const blewupBomb = bombClicked && !onFlagMode && !flagShown.value;
-  const emptyCellClicked = value === '';
+  const { cellData, onFlagMode } = props;
 
-  if (blewupBomb) {
-    alert('Game Over!');
-  } else if (emptyCellClicked) {
-    emit('emptyCellClicked');
-  } else if (onFlagMode && !valueShown.value) {
-    flagShown.value = !flagShown.value;
-  } else if (!flagShown.value) {
-    valueShown.value = true;
+  if (cellData.revealed) return;
+
+  if (onFlagMode) {
+    cellData.hasFlag = !cellData.hasFlag;
+    return;
   }
+
+  if (cellData.hasFlag) return;
+
+  const bombClicked = cellData.value === 'B';
+  emit(bombClicked ? 'gameOver' : 'revealCells');
 }
 </script>
 
@@ -49,5 +52,9 @@ function handleClick() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.revealed {
+  background-color: #604848;
 }
 </style>
