@@ -70,18 +70,26 @@ export class Board {
     });
   }
 
-  revealCell(rowIndex: number, colIndex: number) {
-    const cell = this.getCell(rowIndex, colIndex);
-    if (cell) cell.revealed = true;
+  private revealAllAdjCells(rowIndex: number, colIndex: number) {
+    // runs for each empty adjacant cell and ends once a number is discovered
+    for (let adjRow = rowIndex - 1; adjRow <= rowIndex + 1; adjRow++) {
+      for (let adjCol = colIndex - 1; adjCol <= colIndex + 1; adjCol++) {
+        const ogCellClicked = adjRow === rowIndex && adjCol === colIndex;
+        if (ogCellClicked) continue;
+        this.revealCells(adjRow, adjCol);
+      }
+    }
   }
 
   revealCells(rowIndex: number, colIndex: number): void {
-    // TODO: This should reveal all other adjacent empty cells & numbers and stops at bombs
-    console.log('Revealing adjacent cells...', {
-      rowIndex,
-      colIndex,
-    });
+    const cell = this.getCell(rowIndex, colIndex);
+    if (!cell || cell.revealed) return;
 
-    this.revealCell(rowIndex, colIndex);
+    cell.revealed = true;
+
+    const cellHasNumber = !isNaN(parseInt(cell.value));
+    if (!cellHasNumber) {
+      this.revealAllAdjCells(rowIndex, colIndex);
+    }
   }
 }
