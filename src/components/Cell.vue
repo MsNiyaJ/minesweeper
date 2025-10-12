@@ -16,7 +16,7 @@
 import type { ICellData } from '../board';
 
 const props = defineProps<{ cellData: ICellData; onFlagMode: boolean }>();
-const emit = defineEmits(['gameOver', 'revealCells']);
+const emit = defineEmits(['gameOver', 'revealCells', 'toggleFlag']);
 
 function handleClick() {
   const { cellData, onFlagMode } = props;
@@ -24,7 +24,7 @@ function handleClick() {
   if (cellData.revealed) return;
 
   if (onFlagMode) {
-    cellData.hasFlag = !cellData.hasFlag;
+    emit('toggleFlag');
     return;
   }
 

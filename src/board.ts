@@ -8,9 +8,16 @@ export class Board {
   boardCells!: ICellData[][];
   ROW_LENGTH: number = 10;
   COL_LENGTH: number = 10;
+  totalBombs: number = 0;
+  totalFlags: number = 0;
 
   constructor() {
     this.generateBoard();
+  }
+
+  get remainingBombs() {
+    const remains = this.totalBombs - this.totalFlags;
+    return remains < 0 ? 0 : remains;
   }
 
   generateBoard(): void {
@@ -26,10 +33,10 @@ export class Board {
   }
 
   private setValues(): void {
-    const numOfBombs = Math.floor((this.ROW_LENGTH * this.COL_LENGTH) / 6); // Approximately 16% of the board
+    this.totalBombs = Math.floor((this.ROW_LENGTH * this.COL_LENGTH) / 6); // Approximately 16% of the board
     let bombsPlaced = 0;
 
-    while (bombsPlaced < numOfBombs) {
+    while (bombsPlaced < this.totalBombs) {
       const row = Math.floor(Math.random() * this.ROW_LENGTH);
       const col = Math.floor(Math.random() * this.COL_LENGTH);
 
@@ -75,8 +82,10 @@ export class Board {
     for (let adjRow = rowIndex - 1; adjRow <= rowIndex + 1; adjRow++) {
       for (let adjCol = colIndex - 1; adjCol <= colIndex + 1; adjCol++) {
         const ogCellClicked = adjRow === rowIndex && adjCol === colIndex;
-        if (ogCellClicked) continue;
-        this.revealCells(adjRow, adjCol);
+
+        if (!ogCellClicked) {
+          this.revealCells(adjRow, adjCol);
+        }
       }
     }
   }
@@ -91,5 +100,15 @@ export class Board {
     if (!cellHasNumber) {
       this.revealAllAdjCells(rowIndex, colIndex);
     }
+  }
+
+  flagAdded(cell: ICellData) {
+    cell.hasFlag = true;
+    this.totalFlags = this.totalFlags + 1;
+  }
+
+  flagRemoved(cell: ICellData) {
+    cell.hasFlag = false;
+    this.totalFlags = this.totalFlags - 1;
   }
 }
