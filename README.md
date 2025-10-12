@@ -1,5 +1,25 @@
-# Vue 3 + TypeScript + Vite
+# Minesweeper
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+To win the game you need to reveal all non-mine cells.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## How to Play
+
+Click on a cell to reveal its value. You can toggle the flag button to place a flag on cells you think may have a mine. The cells with a number will tell you how many bombs are adjacent to that cell.
+
+### Running locally
+
+- Switch to the node version specified under engines in [package.json](./package.json)
+
+- Install dependencies
+
+```
+yarn
+```
+
+- Run the app
+
+```
+yarn dev
+```
+
+- Visit http://localhost:5173/
