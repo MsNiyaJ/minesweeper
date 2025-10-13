@@ -44,11 +44,11 @@ function handleClick() {
 .cell {
   width: 30px;
   height: 30px;
-  border: 1px solid #ccc;
+  border: 1px solid #c0c0c0;
   font-size: 20px;
   cursor: pointer;
   user-select: none;
-  background-color: #8b8b8b;
+  background-color: rgb(128 126 126);
   display: flex;
   align-items: center;
   justify-content: center;

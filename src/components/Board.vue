@@ -2,14 +2,16 @@
   <div id="board-container">
     <div id="toolbar">
       <div id="bomb-count">
-        <!-- Bomb icon created by Freepik - Flaticon -->
-        <span>{{ board.remainingBombs }} <img src="../assets/bomb.png" /></span>
+        <p>{{ board.remainingBombs }}</p>
+        <!-- bomb icon created by Freepik - Flaticon -->
+        <img src="../assets/bomb.png" />
       </div>
       <button
         id="flag-btn"
         :class="{ enabled: onFlagMode }"
         @click="toggleFlagMode"
       >
+        <!-- red flag icon created by Fajrul Fitrianto - Flaticon  -->
         <img src="../assets/red-flag.png" />
       </button>
     </div>
@@ -56,6 +58,7 @@ function endGame() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 3px outset black;
 }
 
 .board-row {
@@ -65,31 +68,42 @@ function endGame() {
 #toolbar {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  height: 2rem;
 }
 
 #flag-btn {
   cursor: pointer;
-  margin-bottom: 10px;
-  background-color: #dfdfdf;
+  background: rgb(159 158 158);
+  height: 100%;
+  width: 2.5rem;
+  filter: grayscale(1);
 }
 
 #flag-btn img {
-  width: 20px;
-  height: 20px;
+  height: 100%;
+  width: 100%;
 }
 
 #flag-btn.enabled {
-  background-color: #8b8b8b;
+  filter: grayscale(0);
 }
 
 #bomb-count {
-  background: rgb(129, 127, 127);
-  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: rgb(159 158 158);
+  height: 100%;
+  padding: 0 10px;
+  color: black;
+  border: 3px outset black;
 }
 
 #bomb-count img {
-  width: 1rem;
-  height: 1rem;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 </style>
