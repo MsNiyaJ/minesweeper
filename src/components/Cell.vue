@@ -8,25 +8,38 @@
     }"
     @click="handleClick"
   >
+    <div
+      v-if="cellData.value === 'B' && cellData.revealed"
+      class="bombCellWrapper"
+    >
+      <img :src="bombIconSrc" />
+    </div>
     <img
-      v-show="cellData.hasFlag"
+      v-else-if="cellData.hasFlag"
       class="red-flag"
       src="../assets/red-flag.png"
     />
-    <span v-show="cellData.revealed">{{ cellData.value }}</span>
+    <span v-else-if="cellData.revealed">{{ cellData.value }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { ICellData } from '../board';
 
 const props = defineProps<{ cellData: ICellData; onFlagMode: boolean }>();
 const emit = defineEmits(['gameOver', 'revealCells', 'toggleFlag']);
 
+const bombIconSrc = computed(() => {
+  // Blast icon created by Ylivdesign - Flaticon
+  const img = props.cellData.exploded ? 'blast' : 'bomb';
+  return `src/assets/${img}.png`;
+});
+
 function handleClick() {
   const { cellData, onFlagMode } = props;
 
-  if (cellData.revealed) return;
+  if (cellData.revealed || cellData.disabled) return;
 
   if (onFlagMode) {
     emit('toggleFlag');
@@ -62,12 +75,21 @@ function handleClick() {
   background-color: #5e5e5e;
 }
 
+.bombCellWrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.bombCellWrapper img {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 .pushedIn {
   border-top: 1px solid #303030;
   border-left: 1px solid #303030;
-  border-right: 1px solid #a0a0a0;
-  border-bottom: 1px solid #a0a0a0;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+  border-right: 1px solid #535252;
+  border-bottom: 1px solid #5a5a5a;
 }
 
 .popOut {

@@ -2,6 +2,8 @@ export interface ICellData {
   value: string;
   hasFlag: boolean;
   revealed: boolean;
+  disabled: boolean;
+  exploded: boolean;
 }
 
 export class Board {
@@ -26,6 +28,8 @@ export class Board {
         revealed: false,
         hasFlag: false,
         value: '',
+        disabled: false,
+        exploded: false,
       }))
     );
 
@@ -110,5 +114,27 @@ export class Board {
   flagRemoved(cell: ICellData) {
     cell.hasFlag = false;
     this.totalFlags = this.totalFlags - 1;
+  }
+
+  private showBombsAndDisableCells(cell: ICellData) {
+    cell.disabled = true;
+
+    if (cell.value === 'B') {
+      cell.revealed = true;
+    }
+  }
+
+  revealRemainingBombs() {
+    for (let i = 0; i < this.COL_LENGTH; i++) {
+      for (let j = 0; j < this.ROW_LENGTH; j++) {
+        const cell = this.getCell(i, j);
+        if (!cell) return;
+        this.showBombsAndDisableCells(cell);
+      }
+    }
+  }
+
+  setCellExploded(cell: ICellData) {
+    cell.exploded = true;
   }
 }

@@ -8,6 +8,7 @@
       </div>
       <button
         id="flag-btn"
+        :disabled="gameOver"
         :class="{ enabled: onFlagMode }"
         @click="toggleFlagMode"
       >
@@ -23,8 +24,12 @@
           :onFlagMode="onFlagMode"
           @toggleFlag="toggleFlag(cellData)"
           @revealCells="board.revealCells(rowIndex, colIndex)"
-          @gameOver="endGame"
+          @gameOver="endGame(cellData)"
         />
+      </div>
+      <div v-show="gameOver" id="game-over-explosion">
+        <img src="../assets/blast.png" />
+        <h1>GAME OVER!</h1>
       </div>
     </div>
   </div>
@@ -35,6 +40,7 @@ import { ref, reactive } from 'vue';
 import { Board, type ICellData } from '../board';
 import Cell from './Cell.vue';
 
+const gameOver = ref(false);
 const board = reactive(new Board());
 const cells = reactive(board.boardCells);
 const onFlagMode = ref(false);
@@ -47,13 +53,16 @@ function toggleFlag(cell: ICellData) {
   cell.hasFlag ? board.flagRemoved(cell) : board.flagAdded(cell);
 }
 
-function endGame() {
-  alert('Game Over!');
+function endGame(cellData: ICellData) {
+  gameOver.value = true;
+  board.setCellExploded(cellData);
+  board.revealRemainingBombs();
 }
 </script>
 
 <style scoped>
 #board {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,5 +114,53 @@ function endGame() {
 #bomb-count img {
   height: 1.5rem;
   width: 1.5rem;
+}
+
+#game-over-explosion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  animation: explosionGrow 3s ease-out forwards;
+}
+
+@keyframes explosionGrow {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  12.5% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+#game-over-explosion img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#game-over-explosion h1 {
+  position: relative;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  margin: 0;
+  font-size: 1.5rem;
 }
 </style>
