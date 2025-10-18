@@ -92,7 +92,7 @@ export class Board {
 
   revealCells(rowIndex: number, colIndex: number): void {
     const cell = this.getCell(rowIndex, colIndex);
-    if (!cell || cell.revealed) return;
+    if (!cell || cell.revealed || cell.hasFlag) return;
 
     cell.revealed = true;
 
