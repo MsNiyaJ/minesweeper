@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="{ cell: true, revealed: cellData.revealed }"
+    :class="{
+      cell: true,
+      revealed: cellData.revealed,
+      popOut: !cellData.revealed,
+      pushedIn: cellData.revealed,
+    }"
     @click="handleClick"
   >
     <img
@@ -44,7 +49,6 @@ function handleClick() {
 .cell {
   width: 30px;
   height: 30px;
-  border: 1px solid #c0c0c0;
   font-size: 20px;
   cursor: pointer;
   user-select: none;
@@ -55,6 +59,23 @@ function handleClick() {
 }
 
 .revealed {
-  background-color: #604848;
+  background-color: #5e5e5e;
+}
+
+.pushedIn {
+  border-top: 1px solid #303030;
+  border-left: 1px solid #303030;
+  border-right: 1px solid #a0a0a0;
+  border-bottom: 1px solid #a0a0a0;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.popOut {
+  border-top: 1px solid #a0a0a0;
+  border-left: 1px solid #a0a0a0;
+  border-right: 1px solid #303030;
+  border-bottom: 1px solid #303030;
+  box-shadow: inset 1px 1px 0px #a0a0a0, inset -1px -1px 0px #303030;
+  transition: all 0.1s ease;
 }
 </style>
