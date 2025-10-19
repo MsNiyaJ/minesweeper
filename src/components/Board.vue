@@ -6,6 +6,9 @@
         <!-- bomb icon created by Freepik - Flaticon -->
         <img src="../assets/bomb.png" />
       </div>
+      <button id="new-game-btn" @click="startNewGame">
+        <img :src="emoteSrc" />
+      </button>
       <button
         id="flag-btn"
         :disabled="gameOver"
@@ -17,7 +20,7 @@
       </button>
     </div>
     <div id="board">
-      <div class="board-row" v-for="(row, rowIndex) in cells">
+      <div class="board-row" v-for="(row, rowIndex) in board.boardCells">
         <Cell
           v-for="(cellData, colIndex) in row"
           :cellData="cellData"
@@ -25,6 +28,8 @@
           @toggleFlag="toggleFlag(cellData)"
           @revealCells="board.revealCells(rowIndex, colIndex)"
           @gameOver="endGame(cellData)"
+          @mousedown="setEmoteSrc('worried')"
+          @mouseup="setEmoteSrc('smile')"
         />
       </div>
       <div v-show="gameOver" id="game-over-explosion">
@@ -42,8 +47,14 @@ import Cell from './Cell.vue';
 
 const gameOver = ref(false);
 const board = reactive(new Board());
-const cells = reactive(board.boardCells);
 const onFlagMode = ref(false);
+
+const emotePath = 'src/assets/border/emote-';
+const emoteSrc = ref(emotePath + 'smile.png');
+
+function setEmoteSrc(emote: string) {
+  emoteSrc.value = `${emotePath + emote}.png`;
+}
 
 function toggleFlagMode() {
   onFlagMode.value = !onFlagMode.value;
@@ -55,8 +66,15 @@ function toggleFlag(cell: ICellData) {
 
 function endGame(cellData: ICellData) {
   gameOver.value = true;
+  setEmoteSrc('dead');
   board.setCellExploded(cellData);
   board.revealRemainingBombs();
+}
+
+function startNewGame() {
+  setEmoteSrc('smile');
+  gameOver.value = false;
+  board.generateBoard();
 }
 </script>
 
@@ -162,5 +180,16 @@ function endGame(cellData: ICellData) {
   text-shadow: 2px 2px 4px black;
   margin: 0;
   font-size: 1.5rem;
+}
+
+#new-game-btn {
+  cursor: pointer;
+  background: rgb(159 158 158);
+  height: 100%;
+  width: 3rem;
+}
+
+#new-game-btn img {
+  height: 100%;
 }
 </style>
