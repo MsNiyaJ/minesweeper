@@ -49,7 +49,7 @@ const gameOver = ref(false);
 const board = reactive(new Board());
 const onFlagMode = ref(false);
 
-const emotePath = 'src/assets/border/emote-';
+const emotePath = 'src/assets/emote-';
 const emoteSrc = ref(emotePath + 'smile.png');
 
 function setEmoteSrc(emote: string) {
