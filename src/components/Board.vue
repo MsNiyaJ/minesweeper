@@ -75,6 +75,7 @@ function startNewGame() {
   setEmoteSrc('smile');
   gameOver.value = false;
   onFlagMode.value = false;
+  board.totalFlags = 0;
   board.generateBoard();
 }
 </script>
