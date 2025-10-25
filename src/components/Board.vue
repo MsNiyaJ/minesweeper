@@ -74,6 +74,7 @@ function endGame(cellData: ICellData) {
 function startNewGame() {
   setEmoteSrc('smile');
   gameOver.value = false;
+  onFlagMode.value = false;
   board.generateBoard();
 }
 </script>
