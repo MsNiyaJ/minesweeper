@@ -1,24 +1,13 @@
 <template>
   <div id="board-container">
-    <div id="toolbar">
-      <div id="bomb-count">
-        <p>{{ board.remainingBombs }}</p>
-        <!-- bomb icon created by Freepik - Flaticon -->
-        <img src="../assets/bomb.png" />
-      </div>
-      <button id="new-game-btn" @click="startNewGame">
-        <img :src="emoteSrc" />
-      </button>
-      <button
-        id="flag-btn"
-        :disabled="gameOver"
-        :class="{ enabled: onFlagMode }"
-        @click="toggleFlagMode"
-      >
-        <!-- red flag icon created by Fajrul Fitrianto - Flaticon  -->
-        <img src="../assets/red-flag.png" />
-      </button>
-    </div>
+    <Toolbar
+      :remainingBombs="board.remainingBombs"
+      :gameOver="gameOver"
+      :onFlagMode="onFlagMode"
+      :emoteSrc="emoteSrc"
+      @onNewGame="startNewGame"
+      @toggleFlagMode="toggleFlagMode"
+    />
     <div id="board">
       <div class="board-row" v-for="(row, rowIndex) in board.boardCells">
         <Cell
@@ -43,6 +32,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { Board, type ICellData } from '../board';
+import Toolbar from './Toolbar.vue';
 import Cell from './Cell.vue';
 
 const gameOver = ref(false);
