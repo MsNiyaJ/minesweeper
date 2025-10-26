@@ -104,6 +104,15 @@ export class Board {
     }
   }
 
+  checkForWin() {
+    const nonMineCells = this.boardCells
+      .flat()
+      .filter((cell) => cell.revealed).length;
+    const totalBoardCells = this.COL_LENGTH * this.ROW_LENGTH;
+    const totalNonMineCells = totalBoardCells - this.totalBombs;
+    return nonMineCells === totalNonMineCells;
+  }
+
   flagAdded(cell: ICellData) {
     cell.hasFlag = true;
     this.totalFlags = this.totalFlags + 1;

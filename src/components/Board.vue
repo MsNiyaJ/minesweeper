@@ -15,15 +15,18 @@
           :cellData="cellData"
           :onFlagMode="onFlagMode"
           @toggleFlag="toggleFlag(cellData)"
-          @revealCells="board.revealCells(rowIndex, colIndex)"
+          @revealCells="revealCells(rowIndex, colIndex)"
           @bombClicked="loseGame(cellData)"
           @mousedown="setEmoteSrc('worried')"
           @mouseup="setEmoteSrc('smile')"
         />
       </div>
-      <div v-show="gameOver" id="game-over-explosion">
+      <div v-show="lostGame" class="game-over-message">
         <img src="../assets/blast.png" />
         <h1>GAME OVER!</h1>
+      </div>
+      <div v-show="wonGame" class="game-over-message">
+        <h1>YOU WON!</h1>
       </div>
     </div>
   </div>
@@ -36,6 +39,7 @@ import Toolbar from './Toolbar.vue';
 import Cell from './Cell.vue';
 
 const lostGame = ref(false);
+const wonGame = ref(false);
 const board = reactive(new Board());
 const onFlagMode = ref(false);
 
@@ -43,7 +47,7 @@ const emotePath = 'src/assets/emote-';
 const emoteSrc = ref(emotePath + 'smile.png');
 
 const gameOver = computed(() => {
-  return lostGame.value;
+  return lostGame.value || wonGame.value;
 });
 
 function setEmoteSrc(emote: string) {
@@ -56,6 +60,15 @@ function toggleFlagMode() {
 
 function toggleFlag(cell: ICellData) {
   cell.hasFlag ? board.flagRemoved(cell) : board.flagAdded(cell);
+}
+
+function revealCells(rowIndex: number, colIndex: number) {
+  board.revealCells(rowIndex, colIndex);
+  const won = board.checkForWin();
+  if (won) {
+    setEmoteSrc('shades');
+    wonGame.value = true;
+  }
 }
 
 function loseGame(cellData: ICellData) {
@@ -88,49 +101,7 @@ function startNewGame() {
   display: flex;
 }
 
-#toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  height: 2rem;
-}
-
-#flag-btn {
-  cursor: pointer;
-  background: rgb(159 158 158);
-  height: 100%;
-  width: 2.5rem;
-  filter: grayscale(1);
-}
-
-#flag-btn img {
-  height: 100%;
-  width: 100%;
-}
-
-#flag-btn.enabled {
-  filter: grayscale(0);
-}
-
-#bomb-count {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background: rgb(159 158 158);
-  height: 100%;
-  padding: 0 10px;
-  color: black;
-  border: 3px outset black;
-}
-
-#bomb-count img {
-  height: 1.5rem;
-  width: 1.5rem;
-}
-
-#game-over-explosion {
+.game-over-message {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -162,7 +133,7 @@ function startNewGame() {
   }
 }
 
-#game-over-explosion img {
+.game-over-message img {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -170,7 +141,7 @@ function startNewGame() {
   left: 0;
 }
 
-#game-over-explosion h1 {
+.game-over-message h1 {
   position: relative;
   font-weight: bold;
   text-shadow: 2px 2px 4px black;
