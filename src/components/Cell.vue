@@ -28,7 +28,7 @@ import { computed } from 'vue';
 import type { ICellData } from '../board';
 
 const props = defineProps<{ cellData: ICellData; onFlagMode: boolean }>();
-const emit = defineEmits(['gameOver', 'revealCells', 'toggleFlag']);
+const emit = defineEmits(['bombClicked', 'revealCells', 'toggleFlag']);
 
 const bombIconSrc = computed(() => {
   // Blast icon created by Ylivdesign - Flaticon
@@ -39,7 +39,7 @@ const bombIconSrc = computed(() => {
 function handleClick() {
   const { cellData, onFlagMode } = props;
 
-  if (cellData.revealed || cellData.disabled) return;
+  if (cellData.revealed) return;
 
   if (onFlagMode) {
     emit('toggleFlag');
@@ -49,7 +49,7 @@ function handleClick() {
   if (cellData.hasFlag) return;
 
   const bombClicked = cellData.value === 'B';
-  emit(bombClicked ? 'gameOver' : 'revealCells');
+  emit(bombClicked ? 'bombClicked' : 'revealCells');
 }
 </script>
 

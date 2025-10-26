@@ -16,7 +16,7 @@
           :onFlagMode="onFlagMode"
           @toggleFlag="toggleFlag(cellData)"
           @revealCells="board.revealCells(rowIndex, colIndex)"
-          @gameOver="endGame(cellData)"
+          @bombClicked="loseGame(cellData)"
           @mousedown="setEmoteSrc('worried')"
           @mouseup="setEmoteSrc('smile')"
         />
@@ -30,17 +30,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { Board, type ICellData } from '../board';
 import Toolbar from './Toolbar.vue';
 import Cell from './Cell.vue';
 
-const gameOver = ref(false);
+const lostGame = ref(false);
 const board = reactive(new Board());
 const onFlagMode = ref(false);
 
 const emotePath = 'src/assets/emote-';
 const emoteSrc = ref(emotePath + 'smile.png');
+
+const gameOver = computed(() => {
+  return lostGame.value;
+});
 
 function setEmoteSrc(emote: string) {
   emoteSrc.value = `${emotePath + emote}.png`;
@@ -54,16 +58,16 @@ function toggleFlag(cell: ICellData) {
   cell.hasFlag ? board.flagRemoved(cell) : board.flagAdded(cell);
 }
 
-function endGame(cellData: ICellData) {
-  gameOver.value = true;
+function loseGame(cellData: ICellData) {
   setEmoteSrc('dead');
   board.setCellExploded(cellData);
   board.revealRemainingBombs();
+  lostGame.value = true;
 }
 
 function startNewGame() {
   setEmoteSrc('smile');
-  gameOver.value = false;
+  lostGame.value = false;
   onFlagMode.value = false;
   board.totalFlags = 0;
   board.generateBoard();

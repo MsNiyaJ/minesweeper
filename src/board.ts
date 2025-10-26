@@ -2,7 +2,6 @@ export interface ICellData {
   value: string;
   hasFlag: boolean;
   revealed: boolean;
-  disabled: boolean;
   exploded: boolean;
 }
 
@@ -28,7 +27,6 @@ export class Board {
         revealed: false,
         hasFlag: false,
         value: '',
-        disabled: false,
         exploded: false,
       }))
     );
@@ -117,8 +115,6 @@ export class Board {
   }
 
   private showBombsAndDisableCells(cell: ICellData) {
-    cell.disabled = true;
-
     if (cell.value === 'B') {
       cell.revealed = true;
     }
