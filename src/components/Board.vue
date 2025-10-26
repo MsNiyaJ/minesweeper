@@ -81,6 +81,7 @@ function loseGame(cellData: ICellData) {
 function startNewGame() {
   setEmoteSrc('smile');
   lostGame.value = false;
+  wonGame.value = false;
   onFlagMode.value = false;
   board.totalFlags = 0;
   board.generateBoard();
