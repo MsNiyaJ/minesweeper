@@ -7,6 +7,7 @@
       pushedIn: cellData.revealed,
     }"
     @click="handleClick"
+    @contextmenu="handleRightClick"
   >
     <div
       v-if="cellData.value === 'B' && cellData.revealed"
@@ -50,6 +51,11 @@ function handleClick() {
 
   const bombClicked = cellData.value === 'B';
   emit(bombClicked ? 'bombClicked' : 'revealCells');
+}
+
+function handleRightClick(event: Event) {
+  event.preventDefault(); // Prevents the default browser context menu
+  emit('toggleFlag');
 }
 </script>
 
@@ -97,7 +103,9 @@ function handleClick() {
   border-left: 1px solid #a0a0a0;
   border-right: 1px solid #303030;
   border-bottom: 1px solid #303030;
-  box-shadow: inset 1px 1px 0px #a0a0a0, inset -1px -1px 0px #303030;
+  box-shadow:
+    inset 1px 1px 0px #a0a0a0,
+    inset -1px -1px 0px #303030;
   transition: all 0.1s ease;
 }
 </style>
