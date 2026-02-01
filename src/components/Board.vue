@@ -22,7 +22,7 @@
         />
       </div>
       <div v-show="lostGame" class="game-over-message">
-        <img src="../assets/blast.png" />
+        <img :src="icons.blast" />
         <h1>GAME OVER!</h1>
       </div>
       <div v-show="wonGame" class="game-over-message">
@@ -37,21 +37,31 @@ import { ref, reactive, computed } from 'vue';
 import { Board, type ICellData } from '../board';
 import Toolbar from './Toolbar.vue';
 import Cell from './Cell.vue';
+import { icons } from '../assets';
+
+type Emotes = 'smile' | 'worried' | 'dead' | 'shades';
 
 const lostGame = ref(false);
 const wonGame = ref(false);
 const board = reactive(new Board());
 const onFlagMode = ref(false);
+const { smileEmote, worriedEmote, deadEmote, shadesEmote } = icons.emotes;
 
-const emotePath = 'src/assets/emote-';
-const emoteSrc = ref(emotePath + 'smile.png');
+const emoteMap: Record<Emotes, string> = {
+  smile: smileEmote,
+  worried: worriedEmote,
+  dead: deadEmote,
+  shades: shadesEmote,
+};
+
+const emoteSrc = ref(emoteMap['smile']);
 
 const gameOver = computed(() => {
   return lostGame.value || wonGame.value;
 });
 
-function setEmoteSrc(emote: string) {
-  emoteSrc.value = `${emotePath + emote}.png`;
+function setEmoteSrc(emote: Emotes) {
+  emoteSrc.value = emoteMap[emote];
 }
 
 function toggleFlagMode() {

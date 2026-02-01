@@ -15,11 +15,7 @@
     >
       <img :src="bombIconSrc" />
     </div>
-    <img
-      v-else-if="cellData.hasFlag"
-      class="red-flag"
-      src="../assets/red-flag.png"
-    />
+    <img v-else-if="cellData.hasFlag" class="red-flag" :src="icons.redFlag" />
     <span v-else-if="cellData.revealed">{{ cellData.value }}</span>
   </div>
 </template>
@@ -27,14 +23,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { ICellData } from '../board';
+import { icons } from '../assets';
 
 const props = defineProps<{ cellData: ICellData; onFlagMode: boolean }>();
 const emit = defineEmits(['bombClicked', 'revealCells', 'toggleFlag']);
 
 const bombIconSrc = computed(() => {
   // Blast icon created by Ylivdesign - Flaticon
-  const img = props.cellData.exploded ? 'blast' : 'bomb';
-  return `src/assets/${img}.png`;
+  return props.cellData.exploded ? icons.blast : icons.bomb;
 });
 
 function handleClick() {

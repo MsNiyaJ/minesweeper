@@ -3,7 +3,7 @@
     <div id="bomb-count">
       <p>{{ props.remainingBombs }}</p>
       <!-- bomb icon created by Freepik - Flaticon -->
-      <img src="../assets/bomb.png" />
+      <img :src="icons.bomb" />
     </div>
     <button id="new-game-btn" @click="startNewGame">
       <img :src="emoteSrc" />
@@ -15,12 +15,14 @@
       @click="toggleFlagMode"
     >
       <!-- red flag icon created by Fajrul Fitrianto - Flaticon  -->
-      <img src="../assets/red-flag.png" />
+      <img :src="icons.redFlag" />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { icons } from '../assets';
+
 const props = defineProps<{
   remainingBombs: number;
   gameOver: boolean;
