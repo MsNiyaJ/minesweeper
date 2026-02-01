@@ -51,6 +51,9 @@ function handleClick() {
 
 function handleRightClick(event: Event) {
   event.preventDefault(); // Prevents the default browser context menu
+  const { cellData } = props;
+
+  if (cellData.revealed) return;
   emit('toggleFlag');
 }
 </script>
