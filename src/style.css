@@ -1,3 +1,11 @@
+/* 
+Apply globally to disable double-tap zoom everywhere,
+the manipulation value allows panning and pinch-zooming
+*/
+* {
+  touch-action: manipulation;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
